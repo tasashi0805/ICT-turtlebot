@@ -1,0 +1,1 @@
+my_ground_plane folder need to be save /.gazebo/models
