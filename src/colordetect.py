@@ -20,10 +20,11 @@ class colourdetect:
 		self.sub=rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
 		self.pub=rospy.Publisher("/cmd_vel",Twist, queue_size=10)
 		self.move= Twist()
-		self.speedup=0.5
+		self.speedup=0.4
 		self.speedslow=0.15
-		self.defaultspeed=0.25 
-	
+		self.defaultspeed=0.2
+
+		self.stop=0
 	def colorsize(self,mask,cv2_img):
 		check_mask=np.sum(mask)
 		if check_mask>0:
@@ -77,9 +78,9 @@ class colourdetect:
 		red_mask1 = cv2.inRange(hsv, red_lower_range, red_upper_range)
 		
 		red_mask= red_mask0+red_mask1
-		#print("red_mask:",red_mask)
-		cv2.imshow("red:",red_mask)
-		cv2.waitKey(0)
+
+		#cv2.imshow("red:",red_mask)
+		#cv2.waitKey(0)
 		#green color range and mask
 		green_lower_range=np.array([50,100,50])
 		green_upper_range=np.array([70, 255, 255])
@@ -93,7 +94,7 @@ class colourdetect:
 		bcw,bch=self.colorsize(blue_mask,cv2_img)
 		
 		if bcw and bch !=0:
-			print(bcw,bch)
+			print("bcw:",bcw,"bch:",bch)
 		rcw,rch=self.colorsize(red_mask,cv2_img)
 		print("rcw:",rcw,"rch:",rch)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
@@ -103,11 +104,14 @@ class colourdetect:
 		hasgreen=np.sum(green_mask)
 
 		# twist is a package for determine the robot speed and position(turn right or left)
+		#testing
+		self.move.linear.x=self.defaultspeed
+		self.pub.publish(self.move)
 
-
+		print("currentspeed:",self.move.linear.x)
 		# condition color and pixel size
-		if hasblue>0 and bcw>300 and bch>200 and bcw<400 and bch<300:
-			print("blue color detected")
+		if hasblue>0 and bcw>300 and bch>200 and self.move.linear.x< self.speedup:
+			print("blue color card trigger")
 			#increase speed
 			self.move.linear.x=self.speedup
 			self.pub.publish(self.move)
@@ -119,15 +123,16 @@ class colourdetect:
 
 			
 				#red card stop fimction
-		elif hasred>0 and rcw>300 and rch>200:
-			print("red color detected")
+		elif hasred>0 and rcw>300 and rch>200 and rcw<800 and rch<500:
+			print("red color trigger")
 
 			
 			self.move.linear.x=self.stop
 			self.pub.publish(self.move)
+			
 
 		elif hasgreen>0 and gcw>300 and gch>200 and gcw<400 and gch<300:
-			print("green color detected")
+			print("green color trigger")
 					# Decrease speed for 3 sec
 			self.move.linear.x=self.speedslow
 			self.pub.publish(self.move)
