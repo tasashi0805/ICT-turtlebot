@@ -52,6 +52,6 @@ In terminal:
 
 # Reopen the simulator
 
-In termiankL
+In terminal
 	$ killall gzcleint
 	$ killall gzsever
