@@ -7,14 +7,8 @@ Network:
 	to the last line two line  switch the ip as
 	2 export ROS_MASTER_URI=http://localhost:11311
 	3 export ROS_HOSTNAME=localhost
-	
 	optional command for export the turtlebot waffle it will automatically export the turtlebot before you launch the world
-	
-	
-	4 export TURTLEBOT3_MODEL=waffle
-
-	
-	
+	4 export TURTLEBOT3_MODEL=waffle	
 	5 exit the test editor
 	
 	$ source ~/.bashrc 
