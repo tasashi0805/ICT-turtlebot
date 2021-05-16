@@ -1,4 +1,0 @@
-<launch>
-	<node pkg="project" type="colordetectBot.py" name="colordetect_node" output="screen"></node> 
-
-</launch>

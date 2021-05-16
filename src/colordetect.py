@@ -5,9 +5,9 @@ import rospy
 import sys
 import time
 
-from cv_bridge import CvBridge, CvBridgeError
+#import ROS msg 
 from sensor_msgs.msg import Image
-from geometry_msgs.msg import Twist, Vector3
+from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
 from nav_msgs.msg import Odometry
@@ -53,7 +53,7 @@ class colourdetect:
 
 
 	def image_callback(self, msg):
-		print("--------image_callback-------------")
+		print("--------color trigger -------------")
 		bridge = CvBridge()
 		# Convert your ROS Image message to OpenCV2
 		cv2_img = bridge.imgmsg_to_cv2(msg, "bgr8")
@@ -69,6 +69,7 @@ class colourdetect:
 		blue_mask = cv2.inRange(hsv, blue_lower_range, blue_upper_range)
 		
 		#red color range and mask
+		#red color range start with 0 to 10 and 160 to 189
 		red_lower_range = np.array([0,50,50])
 		red_upper_range = np.array([10,255,255])
 		red_mask0= cv2.inRange(hsv, red_lower_range, red_upper_range)
@@ -91,30 +92,32 @@ class colourdetect:
 		#cv2.imshow("img:",cv2_img)
 		#cv2.waitKey(0)
 		
-		bcw,bch=self.colorsize(blue_mask,cv2_img)
+		# get bue red green object into color size function
+		# if the color has 4 contor then it will return there w and h 
 		
-		if bcw and bch !=0:
-			print("bcw:",bcw,"bch:",bch)
+		bcw,bch=self.colorsize(blue_mask,cv2_img)
 		rcw,rch=self.colorsize(red_mask,cv2_img)
-		print("rcw:",rcw,"rch:",rch)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
+		print("bcw:",bcw,"bch:",bch)
+		print("rcw:",rcw,"rch:",rch)
+		print("gcw:",gcw,"gch:",gch)
 		
 		hasblue=np.sum(blue_mask)
 		hasred=np.sum(red_mask)
 		hasgreen=np.sum(green_mask)
 
 		# twist is a package for determine the robot speed and position(turn right or left)
-		#testing
-		self.move.linear.x=self.defaultspeed
-		self.pub.publish(self.move)
+		#testing for no line follow
 
-		print("currentspeed:",self.move.linear.x)
-		# condition color and pixel size
-		if hasblue>0 and bcw>300 and bch>200 and self.move.linear.x< self.speedup:
+
+		# condition color and pixel size 
+		# if w and h has a high value than it will trigger some 
+		if hasblue>0 and bcw>300 and bch>200 and self.move.linear.x<=self.speedup:
 			print("blue color card trigger")
 			#increase speed
 			self.move.linear.x=self.speedup
 			self.pub.publish(self.move)
+			print("currentspeed:",self.move.linear.x)
 			# 3 second with increase speed funciton
 			time.sleep(3)	
 			# return to default speed
@@ -125,27 +128,24 @@ class colourdetect:
 				#red card stop fimction
 		elif hasred>0 and rcw>300 and rch>200 and rcw<800 and rch<500:
 			print("red color trigger")
-
-			
 			self.move.linear.x=self.stop
 			self.pub.publish(self.move)
+			print("currentspeed:",self.move.linear.x)
 			
 
-		elif hasgreen>0 and gcw>300 and gch>200 and gcw<400 and gch<300:
+		elif hasgreen>0 and gcw>300 and gch>200 and self.move.linear.x<=self.speedslow:
 			print("green color trigger")
-					# Decrease speed for 3 sec
+			# Decrease speed for 3 sec
 			self.move.linear.x=self.speedslow
+			#publish msg						
 			self.pub.publish(self.move)
-			#publish msg	
-								
-
+			print("currentspeed:",self.move.linear.x)
 			time.sleep(3)
-					
-			# default speed
+			# return default speed
 			self.move.linear.x=self.defaultspeed
-					#print("green:",twist_msg.linear)
+			#print("green:",twist_msg.linear)
 			self.pub.publish(self.move)	
-			detectgreencolor=False	
+
 				#print(twist_msg)
 
 def main(args):
