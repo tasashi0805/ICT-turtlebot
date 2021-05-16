@@ -34,7 +34,8 @@ Set up enviorment
 #Starting the simulator
 
 In terminal:
-	(optional if you followed the Network part )
+	
+	(optional if you followed the Network part )	
 	1. export TURTLEBOT3_MODEL=waffle 
 
 
