@@ -15,21 +15,21 @@ Network:
 
 Set up enviorment
 
-1. Install python Open CV
-	$ sudo apt update
-	$ sudo apt install python3-pip
-	$ pip install opencv-python
+	1. Install python Open CV
+		$ sudo apt update
+		$ sudo apt install python3-pip
+		$ pip install opencv-python
 
 
-2. My_ground_plane  folder need to be move into ~/.gazebo/models
+	2. My_ground_plane  folder need to be move into ~/.gazebo/models
 
-In terminal
-3. $ chmod +x python file
+	In terminal
+	3. $ chmod +x python file
 
-4. you might need a dos2unix on obstacle python file
+	4. you might need a dos2unix on obstacle python file
 
-	$ sudo apt-et install dos2unix
-	$ dos2unix pythonfile.py
+		$ sudo apt-et install dos2unix
+		$ dos2unix pythonfile.py
  
 #Starting the simulator
 
@@ -46,6 +46,6 @@ In terminal:
 
 # Reopen the simulator
 
-In terminal
-	$ killall gzcleint
-	$ killall gzsever
+	In terminal
+		$ killall gzcleint
+		$ killall gzsever
