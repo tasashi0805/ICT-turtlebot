@@ -4,6 +4,7 @@ import numpy as np
 import rospy
 import sys
 import time
+from rospy.impl.tcpros_base import TCPROS
 
 #import ROS msg 
 from sensor_msgs.msg import Image
@@ -16,35 +17,30 @@ from nav_msgs.msg import Odometry
 class colourdetect:
 	def __init__(self):
 		print("==========color card class =================")
-	# Set up your subscriber and define its callback
+
+	# Set up  subscriber and pbulisher  define value
 		self.sub=rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
-		self.pub=rospy.Publisher("/cmd_vel",Twist, queue_size=10)
+		self.color_pub= rospy.Publisher("color",String,queue_size=10)
+		self.pub=rospy.Publisher("/cmd_vel",Twist, queue_size=1)
 		self.move= Twist()
-		self.speedup=0.4
-		self.speedslow=0.15
-		self.defaultspeed=0.2
 
 		self.stop=0
+	
 	def colorsize(self,mask,cv2_img):
 		check_mask=np.sum(mask)
 		if check_mask>0:
 			cnts =cv2.findContours(mask,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 			cnts=sorted(cnts, key=cv2.contourArea)
 			#print(len(cnts))
+			#check all the cnts in the map
 			if len(cnts) >=1 :
-				cntrRect=[]
 				for c in cnts:
 					x,y,w,h=cv2.boundingRect(c)
 					#crop the origin img for position y and x
-					new_contour= cv2_img[y:y+h, x:x+w]
-					epsilon = 0.05*cv2.arcLength(c,True)
-					approx = cv2.approxPolyDP(c,epsilon,True)
-					if len(approx) == 4:
-						cv2.rectangle(cv2_img,(x,y),(x+w,y+h),(36,255,12),2)
-						#cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
+					if w>300 and h>200:
+						cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
 						#cv2.imshow("mask:", cv2_img)
-
-
+						#cv2.waitKey(3)
 						return(w,h)
 					else:
 						return (0,0)
@@ -53,15 +49,12 @@ class colourdetect:
 
 
 	def image_callback(self, msg):
-		print("--------color trigger -------------")
 		bridge = CvBridge()
 		# Convert your ROS Image message to OpenCV2
 		cv2_img = bridge.imgmsg_to_cv2(msg, "bgr8")
 
 		#hsv
 		hsv= cv2.cvtColor(cv2_img,cv2.COLOR_BGR2HSV)
-
-
 
 		#blue color range and mask	
 		blue_lower_range = np.array([110,50,50])
@@ -77,11 +70,9 @@ class colourdetect:
 		red_lower_range=np.array([169,50,50])
 		red_upper_range=np.array([189, 255, 255])
 		red_mask1 = cv2.inRange(hsv, red_lower_range, red_upper_range)
-		
 		red_mask= red_mask0+red_mask1
 
-		#cv2.imshow("red:",red_mask)
-		#cv2.waitKey(0)
+
 		#green color range and mask
 		green_lower_range=np.array([50,100,50])
 		green_upper_range=np.array([70, 255, 255])
@@ -98,64 +89,43 @@ class colourdetect:
 		bcw,bch=self.colorsize(blue_mask,cv2_img)
 		rcw,rch=self.colorsize(red_mask,cv2_img)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
-		print("bcw:",bcw,"bch:",bch)
-		print("rcw:",rcw,"rch:",rch)
-		print("gcw:",gcw,"gch:",gch)
+		#print("bcw:",bcw,"bch:",bch)
+		#print("rcw:",rcw,"rch:",rch)
+		#print("gcw:",gcw,"gch:",gch)
 		
-		hasblue=np.sum(blue_mask)
-		hasred=np.sum(red_mask)
-		hasgreen=np.sum(green_mask)
-
 		# twist is a package for determine the robot speed and position(turn right or left)
 		#testing for no line follow
 
-
 		# condition color and pixel size 
 		# if w and h has a high value than it will trigger some 
-		if hasblue>0 and bcw>300 and bch>200 and self.move.linear.x<=self.speedup:
+		if  bcw>0 and bch>0:
 			print("blue color card trigger")
 			#increase speed
-			self.move.linear.x=self.speedup
-			self.pub.publish(self.move)
-			print("currentspeed:",self.move.linear.x)
-			# 3 second with increase speed funciton
-			time.sleep(3)	
-			# return to default speed
-			self.move.linear.x=self.defaultspeed
-			self.pub.publish(self.move)
-
-			
-				#red card stop fimction
-		elif hasred>0 and rcw>300 and rch>200 and rcw<800 and rch<500:
+			color="blue"
+			self.color_pub.publish(color)
+		#w=356 h==230
+			#red card stop fimction
+		elif rcw>640 and rch>400 and rcw<740 and rch<500:
 			print("red color trigger")
-			self.move.linear.x=self.stop
-			self.pub.publish(self.move)
-			print("currentspeed:",self.move.linear.x)
+			color="red"
+			self.color_pub.publish(color)
 			
 
-		elif hasgreen>0 and gcw>300 and gch>200 and self.move.linear.x<=self.speedslow:
+		elif gcw>300 and gch>200:
 			print("green color trigger")
-			# Decrease speed for 3 sec
-			self.move.linear.x=self.speedslow
-			#publish msg						
-			self.pub.publish(self.move)
-			print("currentspeed:",self.move.linear.x)
-			time.sleep(3)
-			# return default speed
-			self.move.linear.x=self.defaultspeed
-			#print("green:",twist_msg.linear)
-			self.pub.publish(self.move)	
+			color="green"
+			self.color_pub.publish(color)
+		else:
+			color="No"
+			self.color_pub.publish(color)
 
-				#print(twist_msg)
-
-def main(args):
+def main():
 	ic = colourdetect()
 	rospy.init_node('detect_color_card', anonymous=True)
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:
 		print("Shutting down")
-	cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()
