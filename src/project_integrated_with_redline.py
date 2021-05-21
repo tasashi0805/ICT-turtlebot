@@ -13,16 +13,16 @@ class ObstacleAvoidanceRedLineFollowing:
         #rospy.init_node('drive')     should not have 2 node
 
 
-        self.D_MAX = 0.5     # MAX_OBSTACLE_DISTANCE detection
+        self.D_MAX = 1     # MAX_OBSTACLE_DISTANCE detection
 
         self.LV_MIN = 0.1    # MIN_LINEAR_VELOCITY
         self.LV_MAX = 2.6     # MAX_LINEAR_VELOCITY
 
         self.AV_MIN = 0.3     # MAX_ANGULAR_VELOCITY
         self.AV_MAX = 1.82     # MAX_ANGULAR_VELOCITY
-        self.AV_FACTOR = 0.5    # adjuest performance
+        self.AV_FACTOR = 0.3    # adjuest performance
 
-        self.DEFAULT_LV = 0.3   # DEFAULT_LINEAR_VELOCITY
+        self.DEFAULT_LV = 0.2   # DEFAULT_LINEAR_VELOCITY
         self.DEFAULT_AV = 0.0    # DEFAULT_ANGULAR_VELOCITY
 
         self.cloest_obtacle_distance = 1000   #ininiate cloest_obtacle_distance
