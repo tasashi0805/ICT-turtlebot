@@ -195,10 +195,10 @@
       </link>
     </model>
     <state world_name='default'>
-      <sim_time>239 294000000</sim_time>
-      <real_time>81 223874472</real_time>
-      <wall_time>1620632259 33878025</wall_time>
-      <iterations>80550</iterations>
+      <sim_time>348 94000000</sim_time>
+      <real_time>26 876664513</real_time>
+      <wall_time>1621742140 524198298</wall_time>
+      <iterations>26665</iterations>
       <model name='my_ground_plane'>
         <pose>-0.018054 0.010358 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -210,43 +210,43 @@
         </link>
       </model>
       <model name='unit_box_clone'>
-        <pose>-14.3592 -10.1819 0.973384 3.3e-05 -1e-06 0.002526</pose>
+        <pose>-14.3504 -8.75981 0.973384 -3.3e-05 -1e-06 -0.004958</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-14.3592 -10.1819 0.973384 3.3e-05 -1e-06 0.002526</pose>
+          <pose>-14.3504 -8.75981 0.973384 -3.3e-05 -1e-06 -0.004958</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0.279928 -9.8 -1e-06 1.36922 -0.936493 -5e-06</acceleration>
-          <wrench>-0.279928 -9.8 -1e-06 0 -0 0</wrench>
+          <acceleration>-0.256074 9.8 -1e-06 -1.37521 -0.85686 4e-06</acceleration>
+          <wrench>-0.256074 9.8 -1e-06 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone_0'>
-        <pose>-24.4267 18.0674 0.973384 3.3e-05 -1e-06 0.001357</pose>
+        <pose>-10.4969 17.7769 0.973384 3.3e-05 -1e-06 -0.002349</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-24.4267 18.0674 0.973384 3.3e-05 -1e-06 0.001357</pose>
+          <pose>-10.4969 17.7769 0.973384 3.3e-05 -1e-06 -0.002349</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0.291396 -9.8 -1e-06 1.36615 -0.974763 -5e-06</acceleration>
-          <wrench>-0.291396 -9.8 -1e-06 0 -0 0</wrench>
+          <acceleration>-0.327753 -9.8 -1e-06 1.35562 -1.09601 -5e-06</acceleration>
+          <wrench>-0.327753 -9.8 -1e-06 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone_clone'>
-        <pose>5.44814 7.60365 0.973384 3.3e-05 1e-06 1.55816</pose>
+        <pose>5.4531 8.44413 0.973384 -3.3e-05 1e-06 1.56987</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>5.44814 7.60365 0.973384 3.3e-05 1e-06 1.55816</pose>
+          <pose>5.4531 8.44413 0.973384 -3.3e-05 1e-06 1.56987</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>9.8 0.180825 0 -0.605382 1.39063 5e-06</acceleration>
-          <wrench>9.8 0.180825 0 0 -0 0</wrench>
+          <acceleration>-9.8 0.3138 -1e-06 -1.04949 -1.3598 -5e-06</acceleration>
+          <wrench>-9.8 0.3138 -1e-06 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_cylinder'>
-        <pose>-9.22284 -4.66619 1.0756 -1e-06 -1e-06 2.8e-05</pose>
+        <pose>-8.29165 -4.83065 1.07561 0 -0 5.8e-05</pose>
         <scale>1.57463 1.57463 2.15123</scale>
         <link name='link'>
-          <pose>-9.22284 -4.66619 1.0756 -1e-06 -1e-06 2.8e-05</pose>
+          <pose>-8.29165 -4.83065 1.07561 0 -0 5.8e-05</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -9.8 0 -0 0</wrench>
+          <acceleration>0.018312 -0 -9.77183 -2e-06 0.017029 2e-06</acceleration>
+          <wrench>0.018312 -0 -9.77183 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
@@ -255,7 +255,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-48.5563 -0.811834 15.2187 -0 0.347644 0.028214</pose>
+        <pose>-33.3595 -0.319826 16.199 0 0.635644 0.068214</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

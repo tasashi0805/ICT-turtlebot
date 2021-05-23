@@ -1,5 +1,0 @@
-<launch>
-	<node pkg="project" type="project.py" name= "obstacle_avoidance" output="screen"></node>
-
-drive.py
-</launch>

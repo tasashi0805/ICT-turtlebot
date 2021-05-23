@@ -16,7 +16,7 @@ from nav_msgs.msg import Odometry
 
 class colourdetect:
 	def __init__(self):
-		print("==========color card class =================")
+		#print("==========color card class =================")
 
 	# Set up  subscriber and pbulisher  define value
 		self.sub=rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
@@ -102,22 +102,20 @@ class colourdetect:
 			print("blue color card trigger")
 			#increase speed
 			color="blue"
-			self.color_pub.publish(color)
 		#w=356 h==230
 			#red card stop fimction
 		elif rcw>640 and rch>400 and rcw<740 and rch<500:
 			print("red color trigger")
 			color="red"
-			self.color_pub.publish(color)
 			
 
-		elif gcw>300 and gch>200:
+		elif gcw>510 and gch>300:
 			print("green color trigger")
 			color="green"
-			self.color_pub.publish(color)
 		else:
 			color="No"
-			self.color_pub.publish(color)
+		
+		self.color_pub.publish(color)
 
 def main():
 	ic = colourdetect()

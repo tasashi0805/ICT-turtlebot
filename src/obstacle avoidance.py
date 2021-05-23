@@ -7,6 +7,7 @@ import math
 
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32MultiArray
 
 class ObstacleAvoidance:
     def __init__(self):
@@ -20,14 +21,12 @@ class ObstacleAvoidance:
         self.AV_MAX = 1.82     # MAX_ANGULAR_VELOCITY
         self.AV_FACTOR = 0.5    # adjuest performance
 
-        self.DEFAULT_LV = 0.3   # DEFAULT_LINEAR_VELOCITY
+        self.DEFAULT_LV = 0.2   # DEFAULT_LINEAR_VELOCITY
         self.DEFAULT_AV = 0.0    # DEFAULT_ANGULAR_VELOCITY
-
-        
-        
-        self.sub = rospy.Subscriber('/scan', LaserScan, self.laserScanCallback)  # define subscriber with name "scan"
-        self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)   # define publisher with name "cmd_vel" # queue: cache of message
-        
+    
+        self.sub = rospy.Subscriber('scan', LaserScan, self.laserScanCallback)  # define subscriber with name "scan"
+        self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)   # define publisher with name "cmd_vel" # queue: cache of message
+        self.obs_pub= rospy.Publisher("obstacle_to_main", Float32MultiArray, queue_size=10)
         self.move = Twist() # get velocity info
         self.run()
         
@@ -59,7 +58,7 @@ class ObstacleAvoidance:
 
     # Input:
     #   d: The distance from bot to obstacle
-    #   angle: angle between this beam (obstacle) and X axis
+    #   angle: angle between thobs_pubs beam (obstacle) and X axis
     # Output:
     #   AV: New bot angular velocity
     def getAngularVelocity(self, d, angle):
@@ -109,11 +108,13 @@ class ObstacleAvoidance:
             elif angle >= -180 and angle < -90:
                 LV = self.getLinearVelocity(d, LV, 180+angle)
                 AV = 0 - self.getAngularVelocity(d, 180+angle)
-            self.move.linear.x = LV
-            self.move.angular.z = AV
+            #self.move.linear.x = LV
+            #self.move.angular.z = AV
             print('ACTION!! LV:' + str(LV) + ', AV:' + str(AV))
-
-        self.pub.publish(self.move)
+            array=[LV,AV]
+            tran_array=Float32MultiArray(data=array)
+            self.obs_pub.publish(tran_array)
+        #self.pub.publish(self.move)
     
 def main():
     try:
