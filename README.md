@@ -43,7 +43,7 @@ In terminal:
 	2. roslaunch project projectworld.launch
 
 	launch the python file
-	3. roslaunch project .launch
+	3. roslaunch project Combine.launch
 
 # Reopen the simulator
 
