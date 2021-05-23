@@ -1,9 +1,17 @@
 #!/usr/bin/env python 
 
 
+<<<<<<< HEAD
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String, Float64,Float32MultiArray
+=======
+import rospy, cv2, cv_bridge
+import numpy as np
+from sensor_msgs.msg import Image
+from geometry_msgs.msg import Twist
+from std_msgs.msg import String, Float64
+>>>>>>> aea0ecd176658f41025b4da1647b7e86495191bf
 
 class mainClass:
 	def __init__(self):
@@ -11,10 +19,17 @@ class mainClass:
 		self.colorsub= rospy.Subscriber("color",String, self.col_msg_callback)
 		self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
 		self.drive_sub= rospy.Subscriber("drive",Float64, self.linefollowcallback)
+<<<<<<< HEAD
 		self.obsscb=rospy.Subscriber("obstacle_to_main",Float32MultiArray,self.obscallback)
 		#self.msg_pub= rospy.Publisher("drive", Float64, queue_size=1)
 		self.twist = Twist()
 		self.state1=False
+=======
+		#self.obsscb=rospy.Subscriber("obstacle_to_main",Float64,self.obscallback)
+		#self.msg_pub= rospy.Publisher("drive", Float64, queue_size=1)
+		self.twist = Twist()
+
+>>>>>>> aea0ecd176658f41025b4da1647b7e86495191bf
 	def col_msg_callback(self,msg):
 		data=msg.data
 		if data=="blue":
@@ -23,6 +38,7 @@ class mainClass:
 			self.twist.linear.x=0.1
 		elif data=="red":
 			self.twist.linear.x=0
+<<<<<<< HEAD
 			self.cmd_vel_pub.publish(self.twist)
 		else:
 			data="No"
@@ -32,12 +48,25 @@ class mainClass:
 				#self.cmd_vel_pub.publish(self.twist)
 		
 		print("Speed:",self.twist.linear.x)
+=======
+			print("Speed:",self.twist.linear)
+			self.cmd_vel_pub.publish(self.twist)
+		else:
+			data="No"
+			self.twist.linear.x=0.2
+			self.cmd_vel_pub.publish(self.twist)
+
+		
+		print("Speed:",self.twist.linear)
+		returnvalue=self.twist.linear.x
+>>>>>>> aea0ecd176658f41025b4da1647b7e86495191bf
 		self.cmd_vel_pub.publish(self.twist)
 	
 	def linefollowcallback(self,msg):
 		data=msg.data
 		err = -float(data) /1000
 		self.twist.angular.z=err
+<<<<<<< HEAD
 		self.cmd_vel_pub.publish(self.twist)
 
 	def obscallback(self,msg):
@@ -51,6 +80,13 @@ class mainClass:
 			self.twist.linear.x=0.2
 			self.state1=False
 		self.cmd_vel_pub.publish(self.twist)
+=======
+		returnvalue=self.twist.angular.z
+		self.cmd_vel_pub.publish(self.twist)
+
+		
+
+>>>>>>> aea0ecd176658f41025b4da1647b7e86495191bf
 
 
 def main():
