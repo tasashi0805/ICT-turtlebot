@@ -25,8 +25,8 @@ class ObstacleAvoidance:
 
         
         
-        self.sub = rospy.Subscriber('scan', LaserScan, self.laserScanCallback)  # define subscriber with name "scan"
-        self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)   # define publisher with name "cmd_vel" # queue: cache of message
+        self.sub = rospy.Subscriber('/scan', LaserScan, self.laserScanCallback)  # define subscriber with name "scan"
+        self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)   # define publisher with name "cmd_vel" # queue: cache of message
         
         self.move = Twist() # get velocity info
         self.run()

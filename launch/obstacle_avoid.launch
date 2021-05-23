@@ -1,5 +1,5 @@
 <launch>
-	<node pkg="project" type="obstacle_avoid.py" name= "obstacle_avoidance" output="screen"></node>
+	<node pkg="project" type="project.py" name= "obstacle_avoidance" output="screen"></node>
 
 drive.py
 </launch>
