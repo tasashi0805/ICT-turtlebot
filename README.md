@@ -8,7 +8,7 @@ Network:
 	2 export ROS_MASTER_URI=http://localhost:11311
 	3 export ROS_HOSTNAME=localhost
 	optional command for export the turtlebot waffle it will automatically export the turtlebot before you launch the world
-	4 export TURTLEBOT3_MODEL=waffle	
+	(optional) export TURTLEBOT3_MODEL=waffle	
 	
 	save and exit the text editor
 	
@@ -27,7 +27,7 @@ Set up enviorment
 	In terminal
 	3. $ chmod +x python file
 
-	4. you might need a dos2unix on obstacle python file
+	4. you might need a dos2unix on python file
 
 		$ sudo apt-get install dos2unix
 		$ dos2unix pythonfile.py
