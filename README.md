@@ -52,3 +52,4 @@ In terminal:
 		$ killall gzcleint
 		$ killall gzsever
 		$ roslaunch project projectworld.launch
+		$ roslaunch project Combine.launch
