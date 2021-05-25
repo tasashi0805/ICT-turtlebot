@@ -6,24 +6,23 @@ from std_msgs.msg import String, Float64,Float32MultiArray
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String, Float64
 
-
+# default speed 0.2
 class mainClass:
 	def __init__(self):
-		print('init')
+		# recevice message from three class 
+		# publish message to Twist (determine the robot movement)		
 		self.colorsub= rospy.Subscriber("color",String, self.col_msg_callback)
 		self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
 		self.drive_sub= rospy.Subscriber("drive",Float64, self.linefollowcallback)
 
 		self.obsscb=rospy.Subscriber("obstacle_to_main",Float32MultiArray,self.obscallback)
-		#self.msg_pub= rospy.Publisher("drive", Float64, queue_size=1)
 		self.twist = Twist()
 		self.state1=False
 
-		#self.obsscb=rospy.Subscriber("obstacle_to_main",Float64,self.obscallback)
-		#self.msg_pub= rospy.Publisher("drive", Float64, queue_size=1)
 		self.twist = Twist()
 	#get message from the color publisher  and adust speed for different color
 	def col_msg_callback(self,msg):
+		#msg datatype float
 		data=msg.data
 		if data=="blue":
 			self.twist.linear.x=0.4
@@ -43,6 +42,7 @@ class mainClass:
 		self.cmd_vel_pub.publish(self.twist)
 	#get message from the linefollow publisher and adjust the angular
 	def linefollowcallback(self,msg):
+		#msg datatype float
 		data=msg.data
 		err = -float(data) /1000
 		self.twist.angular.z=err
@@ -50,10 +50,10 @@ class mainClass:
 		self.cmd_vel_pub.publish(self.twist)
 	#get message from the obstacle avoidance publisher and adjust the linear and angular when there is an obstacle on the path
 	def obscallback(self,msg):
+		# msg datatype is float array
 		self.state1=True
 		linearx=msg.data[0]
 		angularz=msg.data[1]
-		#linearx, angularz=msg.data
 		self.twist.linear.x=linearx
 		self.twist.angular.z=angularz
 		if self.state1==True:
