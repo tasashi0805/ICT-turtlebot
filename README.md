@@ -20,18 +20,20 @@ Set up enviorment
 		$ sudo apt install python3-pip
 		$ pip install opencv-python
 
-
-	2. My_ground_plane  folder need to be move into ~/.gazebo/models
+	2 put the project into ~/catkin_ws/src
+	
+	3. My_ground_plane folder need to be move into ~/.gazebo/models
 
 	In terminal
-	3. $ chmod +x python file
+	4. $ chmod +x python file
 
-	4. you might need a dos2unix on obstacle python file
+	5. you might need a dos2unix on obstacle python file
 
 		$ sudo apt-et install dos2unix
 		$ dos2unix pythonfile.py
  
-#Starting the simulator
+ 
+ Starting the simulator
 
 In terminal:
 	
