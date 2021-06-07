@@ -18,24 +18,27 @@ class mainClass:
 		self.obsscb=rospy.Subscriber("obstacle_to_main",Float32MultiArray,self.obscallback)
 		self.twist = Twist()
 		self.state1=False
-
+		self.defaultspeed=0.2
+		self.speedup=self.defaultspeed*2
+		self.stop=0
+		self.speedslow=0.1
 		self.twist = Twist()
 	#get message from the color publisher  and adust speed for different color
 	def col_msg_callback(self,msg):
 		#msg datatype float
 		data=msg.data
 		if data=="blue":
-			self.twist.linear.x=0.4
+			self.twist.linear.x=self.speedup
 		elif data=="green":
-			self.twist.linear.x=0.1
+			self.twist.linear.x=self.speedslow
 		elif data=="red":
-			self.twist.linear.x=0
+			self.twist.linear.x=self.stop
 			self.cmd_vel_pub.publish(self.twist)
 		else:
 			data="No"
 			if self.state1==False:
 			#if (self.twist.linear.x>0 and self.twist.linear.x<0.2):
-				self.twist.linear.x=0.2
+				self.twist.linear.x=self.defaultspeed
 				#self.cmd_vel_pub.publish(self.twist)		
 		print("Speed:",self.twist.linear)
 
@@ -57,7 +60,7 @@ class mainClass:
 		self.twist.linear.x=linearx
 		self.twist.angular.z=angularz
 		if self.state1==True:
-			self.twist.linear.x=0.2
+			self.twist.linear.x=self.defaultspeed
 			self.state1=False
 		self.cmd_vel_pub.publish(self.twist)
 
