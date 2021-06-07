@@ -32,7 +32,7 @@ class colourdetect:
 				for c in cnts:
 					x,y,w,h=cv2.boundingRect(c)
 					#crop the origin img for position y and x
-					if w>300 and h>200:
+					if w>200 and h>100:
 						cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
 						#cv2.imshow("mask:", cv2_img)
 						#cv2.waitKey(3)
@@ -105,7 +105,7 @@ class colourdetect:
 			color="red"
 			
 			# return green message
-		elif gcw>510 and gch>300:
+		elif gcw>0 and gch>0:
 			print("green color trigger")
 			color="green"
 		# return No color detect message
