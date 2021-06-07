@@ -1,8 +1,8 @@
 <launch>
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
-  <arg name="x_pos" default="-24.751966"/>
-  <arg name="y_pos" default="-4.789564"/>
-  <arg name="z_pos" default="-0.001007"/>
+  <arg name="x_pos" default="-27.075110"/>
+  <arg name="y_pos" default="-4.658811"/>
+  <arg name="z_pos" default="-0.001009"/>
 
 <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find project)/worlds/labworld.world"/>
