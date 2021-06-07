@@ -2,8 +2,7 @@
 import cv2
 import numpy as np
 import rospy
-import sys
-import time
+
 from rospy.impl.tcpros_base import TCPROS
 
 #import ROS msg 
@@ -11,14 +10,11 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
-from nav_msgs.msg import Odometry
 
 
 class colourdetect:
 	def __init__(self):
-		#print("==========color card class =================")
-
-	# Set up  subscriber and pbulisher  define value
+	# Set up  subscriber and publisher define value
 		self.sub=rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
 		self.color_pub= rospy.Publisher("color",String,queue_size=10)
 		self.pub=rospy.Publisher("/cmd_vel",Twist, queue_size=1)
@@ -31,19 +27,15 @@ class colourdetect:
 		if check_mask>0:
 			cnts =cv2.findContours(mask,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 			cnts=sorted(cnts, key=cv2.contourArea)
-			#print(len(cnts))
 			#check all the cnts in the map
-			if len(cnts) >=1 :
-				for c in cnts:
-					x,y,w,h=cv2.boundingRect(c)
+			for c in cnts:
+				x,y,w,h=cv2.boundingRect(c)
 					#crop the origin img for position y and x
-					if w>300 and h>200:
-						cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
+					#if w>100 and h>100:
+						#cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
 						#cv2.imshow("mask:", cv2_img)
 						#cv2.waitKey(3)
-						return(w,h)
-					else:
-						return (0,0)
+				return(w,h)
 		else:
 			return (0,0)
 
@@ -78,8 +70,7 @@ class colourdetect:
 		green_upper_range=np.array([70, 255, 255])
 		green_mask = cv2.inRange(hsv, green_lower_range, green_upper_range)
 					
-		# FInd contours in image
-		
+		#debug check color mask. Mask only has two color back and white. White mean the object that detected 		
 		#cv2.imshow("img:",cv2_img)
 		#cv2.waitKey(0)
 		
@@ -89,29 +80,32 @@ class colourdetect:
 		bcw,bch=self.colorsize(blue_mask,cv2_img)
 		rcw,rch=self.colorsize(red_mask,cv2_img)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
-		#print("bcw:",bcw,"bch:",bch)
+		#debug meesage check color card size
+		print("bcw:",bcw,"bch:",bch)
 		#print("rcw:",rcw,"rch:",rch)
 		#print("gcw:",gcw,"gch:",gch)
 		
 		# twist is a package for determine the robot speed and position(turn right or left)
-		#testing for no line follow
 
 		# condition color and pixel size 
-		# if w and h has a high value than it will trigger some 
-		if  bcw>0 and bch>0:
+		# if w and h has a high value than it will trigger some event
+		
+		# Using publisher to publish the blue color message to main  
+		if  (bcw>400 or bch>300):
 			print("blue color card trigger")
 			#increase speed
 			color="blue"
-		#w=356 h==230
-			#red card stop fimction
+		
+			# return red message
 		elif rcw>640 and rch>400 and rcw<740 and rch<500:
 			print("red color trigger")
 			color="red"
 			
-
-		elif gcw>510 and gch>300:
+			# return green message
+		elif gcw>400 and gch>300:
 			print("green color trigger")
 			color="green"
+		# return No color detect message
 		else:
 			color="No"
 		
