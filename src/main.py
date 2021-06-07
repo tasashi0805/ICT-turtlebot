@@ -36,9 +36,8 @@ class mainClass:
 			self.cmd_vel_pub.publish(self.twist)
 		else:
 			data="No"
-			if self.state1==False:
 			#if (self.twist.linear.x>0 and self.twist.linear.x<0.2):
-				self.twist.linear.x=self.defaultspeed
+			self.twist.linear.x=self.defaultspeed
 				#self.cmd_vel_pub.publish(self.twist)		
 		print("Speed:",self.twist.linear)
 
@@ -54,11 +53,13 @@ class mainClass:
 	#get message from the obstacle avoidance publisher and adjust the linear and angular when there is an obstacle on the path
 	def obscallback(self,msg):
 		# msg datatype is float array
-		self.state1=True
 		linearx=msg.data[0]
 		angularz=msg.data[1]
 		self.twist.linear.x=linearx
 		self.twist.angular.z=angularz
+		print("z",self.twist.angular.z)
+		print("x",self.twist.linear.x)
+		self.state1=True
 		if self.state1==True:
 			self.twist.linear.x=self.defaultspeed
 			self.state1=False
