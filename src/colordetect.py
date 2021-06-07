@@ -28,17 +28,14 @@ class colourdetect:
 			cnts =cv2.findContours(mask,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 			cnts=sorted(cnts, key=cv2.contourArea)
 			#check all the cnts in the map
-			if len(cnts) >=1 :
-				for c in cnts:
-					x,y,w,h=cv2.boundingRect(c)
+			for c in cnts:
+				x,y,w,h=cv2.boundingRect(c)
 					#crop the origin img for position y and x
-					if w>200 and h>100:
-						cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
+					#if w>100 and h>100:
+						#cv2.putText(cv2_img,"w={},h={}".format(w,h),(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.7,(36,255,12),2)
 						#cv2.imshow("mask:", cv2_img)
 						#cv2.waitKey(3)
-						return(w,h)
-					else:
-						return (0,0)
+				return(w,h)
 		else:
 			return (0,0)
 
@@ -84,7 +81,7 @@ class colourdetect:
 		rcw,rch=self.colorsize(red_mask,cv2_img)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
 		#debug meesage check color card size
-		#print("bcw:",bcw,"bch:",bch)
+		print("bcw:",bcw,"bch:",bch)
 		#print("rcw:",rcw,"rch:",rch)
 		#print("gcw:",gcw,"gch:",gch)
 		
@@ -94,7 +91,7 @@ class colourdetect:
 		# if w and h has a high value than it will trigger some event
 		
 		# Using publisher to publish the blue color message to main  
-		if  bcw>0 and bch>0:
+		if  (bcw>400 or bch>300):
 			print("blue color card trigger")
 			#increase speed
 			color="blue"
@@ -105,7 +102,7 @@ class colourdetect:
 			color="red"
 			
 			# return green message
-		elif gcw>0 and gch>0:
+		elif gcw>400 and gch>300:
 			print("green color trigger")
 			color="green"
 		# return No color detect message
