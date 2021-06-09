@@ -1,4 +1,0 @@
-<launch>
-	<node pkg="project" type="colordetect.py" name= "colordetect_node" output="screen"></node>
-	<node pkg="project" type="drive.py" name= "drive_node" output="screen"></node>
-</launch>
