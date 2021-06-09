@@ -1,6 +1,0 @@
-<launch>
-	<node pkg="project" type="colordetect.py" name="colordetect_node" output="screen"></node> 
-	<node pkg="project" type="line_follow.py" name= "drive" output="screen"></node>
-	<node pkg="project" type="obstacle avoidance.py" name= "obstacle_node" output="screen"></node>
-	<node pkg="project" type="main.py" name= "main_node" output="screen"></node>
-</launch>
