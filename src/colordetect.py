@@ -14,20 +14,31 @@ from cv_bridge import CvBridge, CvBridgeError
 
 class colourdetect:
 	def __init__(self):
-	# Set up  subscriber and publisher define value
+		# Set up  subscriber and publisher define value
+		# Subscribe carmera 
 		self.sub=rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
 		self.color_pub= rospy.Publisher("color",String,queue_size=10)
 		self.pub=rospy.Publisher("/cmd_vel",Twist, queue_size=1)
 		self.move= Twist()
-
+		self.CH=300 # for blue and green card min height  
+		self.CW=400 # for blue and green card min weight
+		
+		# purpose of this part is stop when it detect red card
+		# Also when the program detect the red line, it will stop
+		# avoid the above situation, i have to make a specific size range to avoid it stop when the camera detects the   
+		self.RCH_min=640 # red card minuim height  
+		self.RCW_min=400 # red card min weight
+		self.RCH_max=740 # red card max height
+		self.RCW_max=500 # red caed max weight 
 		self.stop=0
-	
+	# This function purpose is get the object weight and height
 	def colorsize(self,mask,cv2_img):
 		check_mask=np.sum(mask)
 		if check_mask>0:
+			# have three outcome with findContours and we need the second output
 			cnts =cv2.findContours(mask,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 			cnts=sorted(cnts, key=cv2.contourArea)
-			#check all the cnts in the map
+			#extrac the W,H
 			for c in cnts:
 				x,y,w,h=cv2.boundingRect(c)
 					#crop the origin img for position y and x
@@ -74,9 +85,7 @@ class colourdetect:
 		#cv2.imshow("img:",cv2_img)
 		#cv2.waitKey(0)
 		
-		# get bue red green object into color size function
-		# if the color has 4 contor then it will return there w and h 
-		
+		# get blue red green object into color size function
 		bcw,bch=self.colorsize(blue_mask,cv2_img)
 		rcw,rch=self.colorsize(red_mask,cv2_img)
 		gcw,gch=self.colorsize(green_mask,cv2_img)
@@ -91,24 +100,23 @@ class colourdetect:
 		# if w and h has a high value than it will trigger some event
 		
 		# Using publisher to publish the blue color message to main  
-		if  (bcw>400 or bch>300):
+		if  (bcw>self.CW or bch>self.CH):
 			print("blue color card trigger")
 			#increase speed
-			color="blue"
-		
+			color="blue"	
 			# return red message
-		elif rcw>640 and rch>400 and rcw<740 and rch<500:
+		elif rcw>self.RCH_min and rch>self.RCW_min and rcw<self.RCH_max and rch<self.RCW_max:
 			print("red color trigger")
 			color="red"
 			
-			# return green message
-		elif gcw>400 and gch>300:
+			# return green message 
+		elif gcw>self.CW and gch>self.CH:
 			print("green color trigger")
 			color="green"
 		# return No color detect message
 		else:
 			color="No"
-		
+		# publish to color topic (color node)
 		self.color_pub.publish(color)
 
 def main():
