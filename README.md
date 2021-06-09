@@ -34,7 +34,7 @@ Set up enviorment
 
 	3. My_ground_plane  folder need to be move into ~/home/.gazebo/models
 
-	4. In terminal $ ~/home/catkin_ws/src/ICT-turtlebot-Project chmod +x all python file
+	4. In terminal $ ~/home/catkin_ws/src/ICT-turtlebot-Project chmod +x *.py
 
 	5. you might need a dos2unix on obstacle python file
 		$ sudo apt-get install dos2unix
@@ -58,4 +58,10 @@ In terminal:
 	In terminal
 		$ killall gzcleint
 		$ killall gzsever
+		
+		
+# file for implement to real world
+	1.colordetectBot.py
+	2.obstacleavoidance_map.py
+	3
 
