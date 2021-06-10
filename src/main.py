@@ -21,7 +21,7 @@ class mainClass:
 		self.defaultspeed=0.2
 		self.speedup=self.defaultspeed*2
 		self.stop=0
-		self.speedslow=0.1
+		self.speedslow=self.defaultspeed/2
 		self.twist = Twist()
 	#get message from the color publisher  and adust speed for different color
 	def col_msg_callback(self,msg):
