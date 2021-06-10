@@ -28,30 +28,30 @@ class Drive:
 		#cv2.imshow("img:", mask)
 		#cv2.waitKey(0)
 #shape of image 
-		h, w, d = image.shape
-		search_top = 3*h/4
-		search_bot = 3*h/4 + 20 
+		height, width, deep = image.shape
+		top = 3*height/4
+		bottom = 3*height/4 + 20 
 
-		mask[0:int(search_top), 0:w] = 0
-		mask[int(search_bot):h, 0:w] = 0
+		mask[0:int(top), 0:width] = 0
+		mask[int(bottom):height, 0:width] = 0
+
+#find then center of the blob using moments in OpenCV
 #get the center points of blob 
 		M = cv2.moments(mask)
+#calculate x,y coordinate of center
 		if M['m00'] > 0:
-			cx = int(M['m10']/M['m00'])
-			cy = int(M['m01']/M['m00'])
+			center_of_line_x = int(M['m10']/M['m00'])
+			center_of_line_y = int(M['m01']/M['m00'])
 #error numbers in the real environment when the robot moving 
-			err = cx - w/2
+			err = center_of_line_x - width/2
 
-			#self.twist.angular.z = -float(err) /100
+			#self.twist.angular.z = -float(err) /1000
 			self.drive_pub.publish(err)
 
-		##cv2.imshow("mask",mask)
-		##cv2.imshow("output", image)
-		##print("output Image")
-		##cv2.waitKey(3)#display the window until any keypress 
-		#cv2.waitkey(1) #display a frame for 1ms, after that 
+		
 if __name__ == '__main__':
 	print('start')
 	rospy.init_node('drive')
 	drive = Drive()
 	rospy.spin()
+
