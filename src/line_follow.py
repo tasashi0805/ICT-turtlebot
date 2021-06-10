@@ -19,7 +19,7 @@ class Drive:
 		self.twist = Twist()
 		self.cnt = 0
 		#when test in simulator
-		self.alpha = 0.01
+		self.alpha = 0.001
 		#when test in real environment
 		#self.alpha = 1/700
 		self.speed = 0.2
@@ -30,7 +30,7 @@ class Drive:
 		#The angle of robot to move
 		self.twist.angular.z = -float(error)*self.alpha
 		#Publish to robot speed and angle
-		self.velocity_publisher.publish(self.twist)
+		self.drive_pub.publish(error)
 
 	def fn_image_from_cam(self, msg):
 		#self.cnt += 1
