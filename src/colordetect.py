@@ -30,7 +30,7 @@ class colourdetect:
 		self.RCW_min=400 # red card min weight
 		self.RCH_max=740 # red card max height
 		self.RCW_max=500 # red caed max weight 
-		self.stop=0
+	
 	# This function purpose is get the object weight and height
 	def colorsize(self,mask,cv2_img):
 		check_mask=np.sum(mask)
@@ -110,7 +110,7 @@ class colourdetect:
 			color="red"
 			
 			# return green message 
-		elif gcw>self.CW and gch>self.CH:
+		elif gcw>self.CW or gch>self.CH:
 			print("green color trigger")
 			color="green"
 		# return No color detect message
