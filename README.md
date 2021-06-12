@@ -52,7 +52,7 @@ In terminal:
 	1. export TURTLEBOT3_MODEL=waffle 
 	launch the simulator world
 	2. roslaunch project projectworld.launch
-
+	In new termainl (ctrl + t)
 	launch the python file
 	3. roslaunch project Combine.launch
 
